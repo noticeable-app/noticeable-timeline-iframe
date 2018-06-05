@@ -10,25 +10,51 @@
 
     <style type="text/css">
         body, html {
-            margin: 0;
-            padding: 0;
             height: 100%;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            margin: 0;
             overflow: hidden;
+            padding: 0;
         }
 
         #content {
-            position: absolute;
-            left: 0;
-            right: 0;
             bottom: 0;
-            top: 0px;
+            left: 250px;
+            position: absolute;
+            right: 0;
+            top: 30px;
+        }
+
+        #menu {
+            background: #f9f9f9;
+            border-right: 1px solid #f1f1f1;
+            height: 100%;
+            overflow-x: hidden;
+            padding: 24px;
+            position: fixed;
+            text-transform: uppercase;
+            width: 220px;
         }
     </style>
+    <script type="text/javascript">
+        window.noticeableSettings = {
+            iframe: {
+                // The selector to use for selecting the iframe HTML element on this page.
+                selector: "#noticeable-iframe",
+                // The URL to the Noticeable Timeline served by the iframe.
+                timelineUrl: "https://timeline.noticeable.io/FAbWKLsdrqqXxOKwNAdU"
+            }
+        };
+    </script>
+    <script src="noticeable-iframe-hash-router.min.js"></script>
 </head>
 
 <body>
+<div id="menu">Custom page</div>
 <div id="content">
-    <iframe width="100%" height="100%" frameborder="0" src="https://timeline.noticeable.io/ZW6TLvP70GfMDgy9dHEX"/>
+    <iframe id="noticeable-iframe" width="100%" height="100%" frameborder="0"/>
 </div>
 </body>
 
