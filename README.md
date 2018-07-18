@@ -8,7 +8,7 @@ By default, an iframe is masking the browser's address bar to show a URL differe
 In other words, the URL in the browser's address bar is not the actual URL to the content.
                                           
 Hash-based routing allows targeting each iframe page via a dedicated URL. 
-It is supported via a small Java code snippet to include on the page that embeds the Timeline.
+It is supported via a small JavaScript code snippet to include on the page that embeds the Timeline.
 
 Below is an example to open a specific page:
 
