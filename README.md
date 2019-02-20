@@ -12,4 +12,5 @@ It is supported via a small JavaScript code snippet to include on the page that 
 
 Below is an example to open a specific page:
 
-http://timeline.tidadi.io/#posts/improving-customer-retention
+http://embedded.timeline.noticeable.io/changelog/#posts/improving-customer-retention
+
