@@ -12,5 +12,5 @@ It is supported via a small JavaScript code snippet to include on the page that 
 
 Below is an example to open a specific page:
 
-http://embedded.timeline.noticeable.io/changelog/#posts/improving-customer-retention
+https://embedded.timeline.noticeable.io/changelog/#posts/improving-customer-retention
 
