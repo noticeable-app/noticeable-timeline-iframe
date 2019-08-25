@@ -6,7 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Noticeable Timeline</title>
+    <title>Changelog Page Example</title>
 
     <style type="text/css">
         body, html {
@@ -41,14 +41,18 @@
     <script type="text/javascript">
         window.noticeableSettings = {
             iframe: {
-                // The selector to use for selecting the iframe HTML element on this page.
-                selector: "#noticeable-iframe",
-                // The URL to the Noticeable Timeline served by the iframe.
-                timelineUrl: "https://timeline.noticeable.io/FAbWKLsdrqqXxOKwNAdU"
+                // The selector to use for selecting the iframe HTML element on your page
+                selector: '#noticeable-iframe',
+                // The URL to the Noticeable Timeline served by the iframe
+                timelineUrl: 'https://timeline.noticeable.io/FAbWKLsdrqqXxOKwNAdU'
             }
         };
+
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://embedded.timeline.noticeable.io/noticeable-iframe-hash-router.min.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
     </script>
-    <script src="noticeable-iframe-hash-router.min.js"></script>
 </head>
 
 <body>
