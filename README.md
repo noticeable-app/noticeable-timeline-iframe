@@ -16,7 +16,7 @@ https://embedded.timeline.noticeable.io/changelog/#posts/improving-customer-rete
 
 ### Setup
 
-Add the following code in your HTML `<head>...</head>` element:
+Add the following code in your HTML between `<head>` and `</head>`:
 
 ```html
 <script type="text/javascript">
@@ -24,6 +24,8 @@ Add the following code in your HTML `<head>...</head>` element:
         iframe: {
             // The selector to use for selecting the iframe HTML element on your page
             selector: '#noticeable-iframe',
+            // Boolean indicating whether your page is a Single Page App or not
+            singlePageApp: false,
             // The URL to the Noticeable Timeline served by the iframe
             timelineUrl: 'https://timeline.noticeable.io/FAbWKLsdrqqXxOKwNAdU'
         }
@@ -36,7 +38,7 @@ Add the following code in your HTML `<head>...</head>` element:
 </script>
 ```
 
-and replace the timeline URL by yours. Then, place an `iframe` element in your page content:
+replace the timeline URL by yours, and set the correct value for `singlePageApp`. Then, place an `iframe` element in your page content:
 
 ```html
 <iframe id="noticeable-iframe" width="100%" height="100%" frameborder="0" scrolling="no"/>

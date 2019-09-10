@@ -1,4 +1,11 @@
 (function() {
+
+    window.noticeableSettings.iframe.singlePageApp =
+        window.noticeableSettings.iframe.singlePageApp === undefined ||
+        window.noticeableSettings.iframe.singlePageApp === null ?
+            true :
+            window.noticeableSettings.iframe.singlePageApp;
+
     function noticeableIframeInit() {
         if ('complete' === document.readyState || 'interactive' === document.readyState) {
             noticeableIframeStart();
@@ -33,20 +40,23 @@
                         location.hash = '';
                     }
                 } else if (data.type === 'noticeable-timeline-dimensions') {
+                    noticeableIframeDebug('New iframe dimensions received', data);
                     var iframe = document.querySelector(window.noticeableSettings.iframe.selector);
                     iframe.style.height = data.height + 'px';
                 }
             }
         }, false);
 
-        var oldLocation = location.href;
-        setInterval(function () {
-            if (oldLocation && location.href !== oldLocation) {
-                noticeableIframeDebug('Location change detected', location.href);
-                noticeableIframeLoad(window.noticeableSettings.iframe.selector, window.noticeableSettings.iframe.timelineUrl);
-                oldLocation = location.href
-            }
-        }, window.noticeableSettings.iframe.pageChangeCheckInterval || 240);
+        if (window.noticeableSettings.iframe.singlePageApp) {
+            var oldLocation = location.href;
+            setInterval(function () {
+                if (oldLocation && location.href !== oldLocation) {
+                    noticeableIframeDebug('Location change detected', location.href);
+                    noticeableIframeLoad(window.noticeableSettings.iframe.selector, window.noticeableSettings.iframe.timelineUrl);
+                    oldLocation = location.href
+                }
+            }, window.noticeableSettings.iframe.pageChangeCheckInterval || 240);
+        }
 
         noticeableIframeLoad(window.noticeableSettings.iframe.selector, window.noticeableSettings.iframe.timelineUrl);
     }
