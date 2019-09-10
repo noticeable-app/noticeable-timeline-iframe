@@ -23,13 +23,18 @@
                 // Payloads that cannot be parsed are not sent by Noticeable
             }
 
-            if (data && data.type === 'noticeable-timeline-location') {
-                var path = noticeableStripProjectId(data.path);
+            if (data) {
+                if (data.type === 'noticeable-timeline-location') {
+                    var path = noticeableStripProjectId(data.path);
 
-                if (path) {
-                    location.hash = path;
-                } else {
-                    location.hash = '';
+                    if (path) {
+                        location.hash = path;
+                    } else {
+                        location.hash = '';
+                    }
+                } else if (data.type === 'noticeable-timeline-dimensions') {
+                    var iframe = document.querySelector(window.noticeableSettings.iframe.selector);
+                    iframe.style.height = data.height + 'px';
                 }
             }
         }, false);

@@ -36,10 +36,10 @@ Add the following code in your HTML `<head>...</head>` element:
 </script>
 ```
 
-and place an `iframe` element in your page content:
+and replace the timeline URL by yours. Then, place an `iframe` element in your page content:
 
 ```html
-<iframe id="noticeable-iframe" width="100%" height="100%" frameborder="0"/>
+<iframe id="noticeable-iframe" width="100%" height="100%" frameborder="0" scrolling="no"/>
 ```
 
 You might still need to style the `iframe` with CSS to make it match your page constraints or styles. For a complete 
