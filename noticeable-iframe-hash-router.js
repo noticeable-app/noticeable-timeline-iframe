@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     window.noticeableSettings.iframe.singlePageApp =
         window.noticeableSettings.iframe.singlePageApp === undefined ||
@@ -23,6 +23,16 @@
             return;
         }
 
+        var iframe = document.querySelector(window.noticeableSettings.iframe.selector);
+
+        if (!iframe) {
+            console.log('Iframe not found on the current page with selector', selector);
+            return;
+        }
+
+        iframe.setAttribute('scrolling', 'no');
+        iframe.style.height = '900px';
+
         window.addEventListener('message', function (event) {
             try {
                 var data = JSON.parse(event.data);
@@ -32,7 +42,16 @@
 
             if (data) {
                 if (data.type === 'noticeable-timeline-location') {
-                    var path = noticeableStripProjectId(data.path);
+                    noticeableIframeDebug('Received new timeline location', data);
+                    var path;
+
+                    if (noticeableStartWith(window.noticeableSettings.iframe.timelineUrl, 'https://timeline.noticeable.io/')) {
+                        path = noticeableStripProjectId(data.path);
+                    } else {
+                        path = data.path;
+                    }
+
+                    noticeableIframeDebug('Setting hash location to', path);
 
                     if (path) {
                         location.hash = path;
@@ -41,7 +60,6 @@
                     }
                 } else if (data.type === 'noticeable-timeline-dimensions') {
                     noticeableIframeDebug('New iframe dimensions received', data);
-                    var iframe = document.querySelector(window.noticeableSettings.iframe.selector);
                     iframe.style.height = data.height + 'px';
                 }
             }
@@ -83,17 +101,12 @@
     function noticeableIframeLoad(selector, timelineUrl) {
         var iframe = document.querySelector(selector);
 
-        if (!iframe) {
-            noticeableIframeDebug('Iframe not found on the current page with selector', selector);
-            return;
-        }
-
         if (location.hash) {
             var newTimelineUrl = noticeableIframeBuildUrl(timelineUrl);
-            noticeableIframeDebug('Updating timeline URL', newTimelineUrl);
+            noticeableIframeDebug('Updating timeline URL from hash', newTimelineUrl);
             iframe.src = newTimelineUrl;
         } else {
-            noticeableIframeDebug('Updating timeline URL', timelineUrl);
+            noticeableIframeDebug('Updating timeline URL using root', timelineUrl);
             iframe.src = timelineUrl;
         }
     }
@@ -131,6 +144,10 @@
         } else {
             return '';
         }
+    }
+
+    function noticeableStartWith(str, word) {
+        return str.lastIndexOf(word, 0) === 0;
     }
 
     noticeableIframeInit();
