@@ -32,6 +32,7 @@ Add the following code in your HTML between `<head>` and `</head>`:
     };
 
     var script = document.createElement('script');
+    script.async = true;
     script.type = 'text/javascript';
     script.src = 'https://embedded.timeline.noticeable.io/noticeable-iframe-hash-router.min.js';
     document.getElementsByTagName('head')[0].appendChild(script);
