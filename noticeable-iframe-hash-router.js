@@ -1,5 +1,37 @@
-(function () {
+// Polyfill onhashchange
+(function (window) {
 
+    // Exit if the browser implements that event
+    if ("onhashchange" in window.document.body) {
+        return;
+    }
+
+    var location = window.location,
+        oldURL = location.href,
+        oldHash = location.hash;
+
+    // Check the location hash on a 100ms interval
+    setInterval(function () {
+        var newURL = location.href,
+            newHash = location.hash;
+
+        // If the hash has changed and a handler has been bound...
+        if (newHash != oldHash && typeof window.onhashchange === "function") {
+            // Execute the handler
+            window.onhashchange({
+                type: "hashchange",
+                oldURL: oldURL,
+                newURL: newURL
+            });
+
+            oldURL = newURL;
+            oldHash = newHash;
+        }
+    }, 100);
+
+})(window);
+
+(function () {
     window.noticeableSettings.iframe.singlePageApp =
         window.noticeableSettings.iframe.singlePageApp === undefined ||
         window.noticeableSettings.iframe.singlePageApp === null ?
@@ -24,6 +56,10 @@
         }
 
         var iframe = document.querySelector(window.noticeableSettings.iframe.selector);
+        iframe.onload = function () {
+            iframe.style.visibility = 'visible';
+        };
+
 
         if (!iframe) {
             console.log('Iframe not found on the current page with selector', selector);
@@ -31,7 +67,7 @@
         }
 
         iframe.setAttribute('scrolling', 'no');
-        iframe.style.height = '900px';
+        iframe.style.height = iframe.parentElement ? iframe.parentElement.scrollHeight + 'px' : '900px';
 
         window.addEventListener('message', function (event) {
             try {
@@ -51,12 +87,16 @@
                         path = data.path;
                     }
 
-                    noticeableIframeDebug('Setting hash location to', path);
-
-                    if (path) {
-                        location.hash = path;
+                    if (window.location.hash && window.location.hash.substr(1) === path) {
+                        noticeableIframeDebug('Skip location update event since new path is the same');
                     } else {
-                        location.hash = '';
+                        noticeableIframeDebug('Setting hash location to', path);
+
+                        if (path) {
+                            window.location.hash = path;
+                        } else {
+                            window.location.hash = '';
+                        }
                     }
                 } else if (data.type === 'noticeable-timeline-dimensions') {
                     noticeableIframeDebug('New iframe dimensions received', data);
@@ -66,14 +106,10 @@
         }, false);
 
         if (window.noticeableSettings.iframe.singlePageApp) {
-            var oldLocation = location.href;
-            setInterval(function () {
-                if (oldLocation && location.href !== oldLocation) {
-                    noticeableIframeDebug('Location change detected', location.href);
-                    noticeableIframeLoad(window.noticeableSettings.iframe.selector, window.noticeableSettings.iframe.timelineUrl);
-                    oldLocation = location.href
-                }
-            }, window.noticeableSettings.iframe.pageChangeCheckInterval || 240);
+            window.onhashchange = function () {
+                noticeableIframeDebug('Location change detected', window.location.href);
+                noticeableIframeLoad(window.noticeableSettings.iframe.selector, window.noticeableSettings.iframe.timelineUrl);
+            };
         }
 
         noticeableIframeLoad(window.noticeableSettings.iframe.selector, window.noticeableSettings.iframe.timelineUrl);
@@ -101,12 +137,18 @@
     function noticeableIframeLoad(selector, timelineUrl) {
         var iframe = document.querySelector(selector);
 
-        if (location.hash) {
+        if (window.location.hash) {
             var newTimelineUrl = noticeableIframeBuildUrl(timelineUrl);
             noticeableIframeDebug('Updating timeline URL from hash', newTimelineUrl);
-            iframe.src = newTimelineUrl;
+            if (newTimelineUrl !== iframe.src) {
+                iframe.style.visibility = 'hidden';
+                iframe.src = newTimelineUrl;
+            } else {
+                noticeableIframeDebug('Not updating iframe since URL is the same');
+            }
         } else {
             noticeableIframeDebug('Updating timeline URL using root', timelineUrl);
+            iframe.style.visibility = 'hidden';
             iframe.src = timelineUrl;
         }
     }
@@ -123,7 +165,7 @@
 
     function noticeableIframeBuildUrl(timelineUrl) {
         var timelineUrlChunks = timelineUrl.split('?');
-        var newTimelineUrl = timelineUrlChunks[0] + location.hash.replace('#', '/');
+        var newTimelineUrl = timelineUrlChunks[0] + window.location.hash.replace('#', '/');
         if (timelineUrlChunks.length > 1) {
             newTimelineUrl += '?' + timelineUrlChunks[1];
         }
