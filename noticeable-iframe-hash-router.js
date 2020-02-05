@@ -27,7 +27,7 @@
             oldURL = newURL;
             oldHash = newHash;
         }
-    }, 100);
+    }, window.noticeableSettings.iframe.pageChangeCheckInterval || 100);
 
 })(window);
 
