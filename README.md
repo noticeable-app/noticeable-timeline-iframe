@@ -2,9 +2,7 @@
 
 This repository shows how to embed a Noticeable Timeline in your own pages by using an iframe.
 
-**As of February 1, 2021, this repository is deprecated:**
-
-https://help.noticeable.io/en-us/article/how-to-ugprade-from-legacy-embedded-timelines-2jz9mr/
+**As of February 1, 2021, this repository is deprecated:** https://help.noticeable.io/en-us/article/how-to-ugprade-from-legacy-embedded-timelines-2jz9mr/
 
 ## Hash-based routing
 
